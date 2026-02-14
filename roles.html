@@ -33,6 +33,10 @@
       >
         CONFIDENTIAL
       </div>
+      <div
+        id="roleBadge"
+        class="absolute top-[-35px] left-[-10px] border-[3px] px-[10px] py-[5px] font-bold rotate-[10deg] opacity-80 hidden"
+      ></div>
     </div>
 
     <script>
@@ -103,9 +107,9 @@
         await loadingDots(5, 150);
         await delay(300);
 
-        // 🔥 Insert styled role properly (not typed character by character)
         const roleHTML = getRoleDisplay(roles[currentIndex]);
         terminal.innerHTML += `<div class="py-3 text-2xl">   ${roleHTML}</div>`;
+        showRoleBadge(roles[currentIndex]);
 
         await delay(500);
         await typeLine(`> TAP FOR NEXT PERSON`);
@@ -113,6 +117,7 @@
         terminal.onclick = () => {
           terminal.onclick = null;
           currentIndex++;
+          hideRoleBadge();
           runSequence();
         };
       }
@@ -169,6 +174,39 @@
         for (let i = count; i > 0; i--) {
           await delay(speed);
           terminal.innerHTML = terminal.innerHTML.slice(0, -1);
+        }
+      }
+      function hideRoleBadge(role) {
+        const badge = document.getElementById("roleBadge");
+        badge.classList.add("hidden");
+      }
+      function showRoleBadge(role) {
+        const badge = document.getElementById("roleBadge");
+        badge.classList.remove("hidden");
+
+        switch (role) {
+          case "MAFIA":
+            badge.className =
+              "absolute top-[-35px] left-[-10px] border-[3px] border-red-600 text-red-600 w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
+            badge.innerHTML = "MAFIA";
+            break;
+
+          case "DOCTOR":
+            badge.className =
+              "absolute top-[-35px] left-[-10px] border-[3px] border-green-500 text-green-500 w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
+            badge.innerHTML = "DOCTOR";
+            break;
+
+          case "DETECTIVE":
+            badge.className =
+              "absolute top-[-35px] left-[-10px] border-[3px] border-green-500 text-green-500 w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
+            badge.innerHTML = "DETECTIVE";
+            break;
+
+          default:
+            badge.className =
+              "absolute top-[-35px] left-[-10px] border-[3px] border-white text-white w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
+            badge.innerHTML = "VILLAGER";
         }
       }
     </script>
