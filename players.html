@@ -107,14 +107,25 @@
 
         const minRequired = getMinimumRequiredPlayers();
 
-        if (players.length < minRequired) {
-          players = [];
+        // If no players stored at all → initialize fresh
+        if (players.length === 0) {
           for (let i = 1; i <= minRequired; i++) {
             players.push(String(i));
           }
         }
 
+        // If below minimum → only add missing ones
+        if (players.length < minRequired) {
+          const currentLength = players.length;
+
+          for (let i = currentLength + 1; i <= minRequired; i++) {
+            players.push(String(i));
+          }
+        }
+
+        // Render players
         players.forEach((name) => createPlayerInput(name));
+
         savePlayers();
       };
 
