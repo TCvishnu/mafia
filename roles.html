@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAFIA: Identity Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body
+    class="bg-[#050505] text-white font-mono flex justify-center items-center min-h-screen relative overflow-hidden"
+  >
+    <!-- Scanlines -->
+    <div
+      class="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"
+    ></div>
+
+    <div
+      class="relative border-4 border-white p-10 w-[90%] max-w-xl text-center uppercase"
+    >
+      <div
+        class="text-3xl font-black border-b-8 border-white pb-4 mb-10 tracking-[-2px] font-['Impact']"
+      >
+        Identity Protocol
+      </div>
+
+      <div
+        id="terminalArea"
+        class="text-left text-lg leading-relaxed h-auto whitespace-pre-wrap"
+      ></div>
+    </div>
+
+    <script>
+      const players = JSON.parse(localStorage.getItem("playersList") || "[]");
+      const mafiaCount = parseInt(localStorage.getItem("mafias") || "1");
+      const hasDoctor = localStorage.getItem("doctor") === "YES";
+      const hasDetective = localStorage.getItem("detective") === "YES";
+
+      let roles = [];
+      let currentIndex = 0;
+      const terminal = document.getElementById("terminalArea");
+
+      init();
+
+      function init() {
+        generateRoles();
+        runSequence();
+      }
+
+      function generateRoles() {
+        roles = [];
+
+        for (let i = 0; i < mafiaCount; i++) roles.push("MAFIA");
+        if (hasDoctor) roles.push("DOCTOR");
+        if (hasDetective) roles.push("DETECTIVE");
+
+        while (roles.length < players.length) {
+          roles.push("VILLAGER");
+        }
+
+        shuffle(roles);
+      }
+
+      function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+      }
+
+      async function runSequence() {
+        if (currentIndex >= players.length) {
+          endSequence();
+          return;
+        }
+
+        terminal.innerHTML = "";
+
+        const name = players[currentIndex];
+        const displayName = /^[0-9]+$/.test(name)
+          ? `PLAYER ${name}`
+          : name.toUpperCase();
+
+        await typeLine(`> IDENTIFYING SUBJECT...`);
+        await delay(500);
+        await typeLine(`> SUBJECT: ${displayName}`);
+        await delay(700);
+        await typeLine(`> AUTHORIZATION CHECK...`);
+        await delay(800);
+        await typeLine(`> ROLE UNLOCKED:`);
+
+        await delay(500);
+
+        // Show dots animation
+        await loadingDots(5, 150);
+
+        await delay(300);
+
+        // Now reveal role
+        const roleText = getRoleDisplay(roles[currentIndex]);
+        await typeLine(`\n   ${roleText}\n`);
+
+        await delay(500);
+        await typeLine(`> TAP TO CONTINUE`);
+
+        terminal.onclick = () => {
+          document.body.onclick = null;
+          currentIndex++;
+          runSequence();
+        };
+      }
+
+      async function typeLine(text) {
+        for (let i = 0; i < text.length; i++) {
+          terminal.innerHTML += text[i];
+          await delay(20);
+        }
+        terminal.innerHTML += "\n";
+      }
+
+      function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      function endSequence() {
+        terminal.innerHTML = `
+        > ALL ROLES ASSIGNED
+
+        > NIGHT PHASE INITIATED
+
+        > TAP TO RETURN
+        `;
+
+        document.body.onclick = () => {
+          window.location.href = "index.html";
+        };
+      }
+      function getRoleDisplay(role) {
+        switch (role) {
+          case "MAFIA":
+            return "🕶️  MAFIA";
+          case "DOCTOR":
+            return "🩺  DOCTOR";
+          case "DETECTIVE":
+            return "🔍  DETECTIVE";
+          default:
+            return "👤  VILLAGER";
+        }
+      }
+
+      async function loadingDots(count = 5, speed = 200) {
+        // Add dots one by one
+        for (let i = 1; i <= count; i++) {
+          terminal.innerHTML += ".";
+          await delay(speed);
+        }
+
+        // Remove dots one by one
+        for (let i = count; i > 0; i--) {
+          await delay(speed);
+          terminal.innerHTML = terminal.innerHTML.slice(0, -1);
+        }
+      }
+    </script>
+  </body>
+</html>
