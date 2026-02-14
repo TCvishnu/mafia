@@ -23,11 +23,31 @@
       >
         Identity Protocol
       </div>
+      <!-- HANDOUT SCREEN -->
+      <div id="handoutScreen" class="text-center">
+        <div class="text-lg mb-6 tracking-wider">
+          VILLAGE RATION CARD RECORD
+        </div>
 
-      <div
-        id="terminalArea"
-        class="text-left text-md leading-relaxed h-auto whitespace-pre-wrap"
-      ></div>
+        <div
+          id="handoutName"
+          class="text-2xl font-bold border-2 border-white py-4 mb-6 tracking-wider"
+        ></div>
+
+        <button
+          onclick="startVerification()"
+          class="w-full py-3 bg-white text-black font-bold hover:bg-red-500 hover:text-white transition"
+        >
+          ISSUE DOCUMENT
+        </button>
+      </div>
+
+      <div id="terminalScreen" class="hidden">
+        <div
+          id="terminalArea"
+          class="text-left text-md leading-relaxed whitespace-pre-wrap"
+        ></div>
+      </div>
       <div
         class="absolute bottom-[-40px] right-[-10px] border-[3px] border-red-600 text-red-600 px-[10px] py-[5px] font-bold rotate-[-15deg] opacity-60 pointer-events-none"
       >
@@ -42,6 +62,10 @@
       const hasDoctor = localStorage.getItem("doctor") === "YES";
       const hasDetective = localStorage.getItem("detective") === "YES";
 
+      const handoutScreen = document.getElementById("handoutScreen");
+      const terminalScreen = document.getElementById("terminalScreen");
+      const handoutName = document.getElementById("handoutName");
+
       let roles = [];
       let currentIndex = 0;
       const terminal = document.getElementById("terminalArea");
@@ -50,6 +74,28 @@
 
       function init() {
         generateRoles();
+        showHandout();
+      }
+
+      function showHandout() {
+        if (currentIndex >= players.length) {
+          endSequence();
+          return;
+        }
+
+        const name = players[currentIndex];
+        const displayName = /^[0-9]+$/.test(name)
+          ? `PLAYER ${name}`
+          : name.toUpperCase();
+
+        handoutName.textContent = displayName;
+
+        terminalScreen.classList.add("hidden");
+        handoutScreen.classList.remove("hidden");
+      }
+      function startVerification() {
+        handoutScreen.classList.add("hidden");
+        terminalScreen.classList.remove("hidden");
         runSequence();
       }
 
@@ -123,7 +169,7 @@
           terminal.onclick = null;
           currentIndex++;
           hideRoleBadge();
-          runSequence();
+          showHandout();
         };
       }
 
