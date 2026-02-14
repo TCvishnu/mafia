@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAFIA: ASSIGNMENT ROLEz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+
+  <body
+    class="bg-[#050505] text-white font-mono flex justify-center items-center h-screen m-0 overflow-hidden relative"
+  >
+    <div
+      class="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_4px,3px_100%]"
+    ></div>
+
+    <div
+      class="relative bg-[#050505] border-4 border-white p-5 w-[90%] max-w-[500px] shadow-[0_0_20px_rgba(255,255,255,0.1)] uppercase"
+    >
+      <div
+        class="text-[1.8rem] sm:text-[2rem] md:text-[2.5rem] font-black text-center border-b-[8px] border-white mb-[30px] pb-[10px] tracking-[-2px] font-['Impact']"
+      >
+        Once upon a village . . .
+      </div>
+
+      <div
+        class="flex justify-between items-center mb-[15px] border-b border-[#444] pb-[10px]"
+      >
+        <span>Mafias</span>
+        <input
+          type="number"
+          value="2"
+          min="2"
+          class="bg-transparent border-none text-white font-mono text-[1.2rem] w-[50px] text-center outline-none focus:text-red-600"
+        />
+      </div>
+
+      <div
+        class="flex justify-between items-center mb-[15px] border-b border-[#444] pb-[10px]"
+      >
+        <span>Doctor</span>
+        <button
+          onclick="toggleRole(this)"
+          class="w-[50px] py-1 bg-white text-[#050505] font-bold transition duration-200"
+        >
+          YES
+        </button>
+      </div>
+
+      <div
+        class="flex justify-between items-center mb-[15px] border-b border-[#444] pb-[10px]"
+      >
+        <span>Detective</span>
+        <button
+          onclick="toggleRole(this)"
+          class="w-[50px] py-1 bg-white text-[#050505] font-bold transition duration-200"
+        >
+          YES
+        </button>
+      </div>
+
+      <button
+        onclick="startAssignment()"
+        class="mt-[30px] w-full py-5 bg-white text-[#050505] font-['Impact'] text-[1.5rem] cursor-pointer [clip-path:polygon(5%_0,100%_0,100%_70%,95%_100%,0_100%,0_30%)] hover:bg-red-500 hover:text-white"
+      >
+        THE GATHERING
+      </button>
+
+      <div
+        class="absolute bottom-[-40px] right-[-20px] border-[3px] border-red-600 text-red-600 px-[10px] py-[5px] font-bold rotate-[-15deg] opacity-60 pointer-events-none"
+      >
+        TOP SECRET
+      </div>
+    </div>
+
+    <script>
+      const mafiasInput = document.querySelectorAll("input")[0];
+      const roleButtons = document.querySelectorAll("button[onclick]");
+
+      window.onload = function () {
+        const mafias = localStorage.getItem("mafias");
+        const doctor = localStorage.getItem("doctor");
+        const detective = localStorage.getItem("detective");
+        const players = JSON.parse(localStorage.getItem("playersList") || "[]");
+
+        if (mafias) mafiasInput.value = mafias;
+
+        if (doctor) setRoleState(roleButtons[0], doctor);
+        if (detective) setRoleState(roleButtons[1], detective);
+      };
+
+      mafiasInput.addEventListener("input", () => {
+        localStorage.setItem("mafias", mafiasInput.value);
+      });
+
+      function toggleRole(button) {
+        const isYes = button.innerText === "YES";
+        const newValue = isYes ? "NO" : "YES";
+
+        setRoleState(button, newValue);
+
+        if (button.parentElement.querySelector("span").innerText === "Doctor") {
+          localStorage.setItem("doctor", newValue);
+        } else {
+          localStorage.setItem("detective", newValue);
+        }
+      }
+
+      function setRoleState(button, value) {
+        button.innerText = value;
+
+        if (value === "YES") {
+          button.classList.remove("bg-red-500", "text-white");
+          button.classList.add("bg-white", "text-[#050505]");
+        } else {
+          button.classList.remove("bg-white", "text-[#050505]");
+          button.classList.add("bg-red-500", "text-white");
+        }
+      }
+
+      function startAssignment() {
+        window.location.href = "players.html";
+      }
+    </script>
+  </body>
+</html>
