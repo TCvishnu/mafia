@@ -19,7 +19,7 @@
       class="relative border-4 border-white p-10 w-[90%] max-w-xl text-center uppercase"
     >
       <div
-        class="text-3xl font-black border-b-8 border-white pb-4 mb-10 tracking-[-2px] font-['Impact']"
+        class="text-3xl font-black border-b-8 border-white pb-4 mb-10 tracking-[-1px] font-['Impact']"
       >
         Identity Protocol
       </div>
@@ -100,18 +100,15 @@
         await typeLine(`> ROLE UNLOCKED:`);
 
         await delay(500);
-
-        // Show dots animation
         await loadingDots(5, 150);
-
         await delay(300);
 
-        // Now reveal role
-        const roleText = getRoleDisplay(roles[currentIndex]);
-        await typeLine(`\n   ${roleText}\n`);
+        // 🔥 Insert styled role properly (not typed character by character)
+        const roleHTML = getRoleDisplay(roles[currentIndex]);
+        terminal.innerHTML += `<div class="py-3 text-2xl">   ${roleHTML}</div>`;
 
         await delay(500);
-        await typeLine(`> TAP TO CONTINUE`);
+        await typeLine(`> TAP FOR NEXT PERSON`);
 
         terminal.onclick = () => {
           terminal.onclick = null;
@@ -151,13 +148,13 @@
       function getRoleDisplay(role) {
         switch (role) {
           case "MAFIA":
-            return "🕶️  MAFIA";
+            return `<span class="text-red-500">MAFIA</span>`;
           case "DOCTOR":
-            return "🩺  DOCTOR";
+            return `<span class="text-green-500">DOCTOR</span>`;
           case "DETECTIVE":
-            return "🔍  DETECTIVE";
+            return `<span class="text-green-500">DETECTIVE</span>`;
           default:
-            return "👤  VILLAGER";
+            return `<span class="text-white">VILLAGER</span>`;
         }
       }
 
