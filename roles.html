@@ -26,17 +26,14 @@
 
       <div
         id="terminalArea"
-        class="text-left text-lg leading-relaxed h-auto whitespace-pre-wrap"
+        class="text-left text-md leading-relaxed h-auto whitespace-pre-wrap"
       ></div>
       <div
         class="absolute bottom-[-40px] right-[-10px] border-[3px] border-red-600 text-red-600 px-[10px] py-[5px] font-bold rotate-[-15deg] opacity-60 pointer-events-none"
       >
         CONFIDENTIAL
       </div>
-      <div
-        id="roleBadge"
-        class="absolute top-[-35px] left-[-10px] border-[3px] px-[10px] py-[5px] font-bold rotate-[10deg] opacity-80 hidden"
-      ></div>
+      <div id="roleBadge" class="hidden"></div>
     </div>
 
     <script>
@@ -95,24 +92,32 @@
           ? `PLAYER ${name}`
           : name.toUpperCase();
 
-        await typeLine(`> IDENTIFYING SUBJECT...`);
-        await delay(500);
-        await typeLine(`> SUBJECT: ${displayName}`);
-        await delay(700);
-        await typeLine(`> AUTHORIZATION CHECK...`);
+        await typeLine(`> VILLAGE CITIZEN RECORD`);
         await delay(800);
-        await typeLine(`> ROLE UNLOCKED:`);
 
-        await delay(500);
-        await loadingDots(5, 150);
-        await delay(300);
+        await typeLine(`> ANALYZING CITIZEN NAME...`);
+        await delay(700);
 
+        await typeLine(`> NAME: ${displayName}`);
+        await delay(900);
+
+        await typeLine(`> VERIFYING CITIZEN STATUS:`);
+        await delay(400);
+        if (roles[currentIndex] === "MAFIA") {
+          await delay(600);
+          await typeLine(`> ERROR: RECORD MISMATCH`);
+          await delay(700);
+
+          await typeLine(`> CROSS-CHECKING...`);
+          await delay(900);
+        }
         const roleHTML = getRoleDisplay(roles[currentIndex]);
-        terminal.innerHTML += `<div class="py-3 text-2xl">   ${roleHTML}</div>`;
+        terminal.innerHTML += `<div class="py-3 text-2xl tracking-wider">   ${roleHTML}</div>`;
+
         showRoleBadge(roles[currentIndex]);
 
         await delay(500);
-        await typeLine(`> TAP FOR NEXT PERSON`);
+        await typeLine(`> NEXT APPLICANT PLEASE`);
 
         terminal.onclick = () => {
           terminal.onclick = null;
@@ -180,34 +185,53 @@
         const badge = document.getElementById("roleBadge");
         badge.classList.add("hidden");
       }
+
       function showRoleBadge(role) {
         const badge = document.getElementById("roleBadge");
+
+        badge.className = `
+        absolute
+        top-[-45px]
+        left-[-25px]
+        w-40 h-40
+        rounded-full
+        flex items-center justify-center
+        font-black
+        uppercase
+        tracking-[3px]
+        rotate-[-18deg]
+        opacity-90
+        pointer-events-none
+        z-20
+      `;
+
+        // Base ring
+        let colorClasses =
+          role === "MAFIA"
+            ? "border-red-800 text-red-800"
+            : "border-green-700 text-green-700";
+
+        badge.classList.add(
+          "border-4",
+          colorClasses.split(" ")[0],
+          colorClasses.split(" ")[1],
+        );
+
+        const innerRingColor =
+          role === "MAFIA" ? "border-red-800" : "border-green-700";
+
+        badge.innerHTML = `
+        <div class="absolute w-32 h-32 rounded-full border-2 ${innerRingColor}"></div>
+        <div class="text-center leading-tight text-xs">
+          ${role === "MAFIA" ? "RECORD<br/>REJECTED" : "APPROVED"}
+        </div>`;
+
+        // Ink texture effect
+        badge.style.filter = "contrast(120%) brightness(90%)";
+        badge.style.boxShadow = "0 0 15px rgba(0,0,0,0.6)";
+        badge.style.opacity = 0.85;
+
         badge.classList.remove("hidden");
-
-        switch (role) {
-          case "MAFIA":
-            badge.className =
-              "absolute top-[-35px] left-[-10px] border-[3px] border-red-600 text-red-600 w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
-            badge.innerHTML = "MAFIA";
-            break;
-
-          case "DOCTOR":
-            badge.className =
-              "absolute top-[-35px] left-[-10px] border-[3px] border-green-500 text-green-500 w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
-            badge.innerHTML = "DOCTOR";
-            break;
-
-          case "DETECTIVE":
-            badge.className =
-              "absolute top-[-35px] left-[-10px] border-[3px] border-green-500 text-green-500 w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
-            badge.innerHTML = "DETECTIVE";
-            break;
-
-          default:
-            badge.className =
-              "absolute top-[-35px] left-[-10px] border-[3px] border-white text-white w-40 py-[5px] font-bold rotate-[-15deg] opacity-80";
-            badge.innerHTML = "VILLAGER";
-        }
       }
     </script>
   </body>
