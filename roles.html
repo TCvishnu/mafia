@@ -104,7 +104,7 @@
         await typeLine(`> TAP TO CONTINUE`);
 
         terminal.onclick = () => {
-          document.body.onclick = null;
+          terminal.onclick = null;
           currentIndex++;
           runSequence();
         };
@@ -123,18 +123,21 @@
       }
 
       function endSequence() {
+        terminal.onclick = null;
+
         terminal.innerHTML = `
         > ALL ROLES ASSIGNED
 
-        > NIGHT PHASE INITIATED
+        > LET THE MAYHEM BEGIN
 
         > TAP TO RETURN
         `;
 
-        document.body.onclick = () => {
+        terminal.onclick = () => {
           window.location.href = "index.html";
         };
       }
+
       function getRoleDisplay(role) {
         switch (role) {
           case "MAFIA":
