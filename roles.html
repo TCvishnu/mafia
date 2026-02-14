@@ -75,10 +75,7 @@
       </div>
 
       <div id="terminalScreen" class="hidden">
-        <div
-          id="terminalArea"
-          class="text-left text-md leading-relaxed whitespace-pre-wrap"
-        ></div>
+        <div id="terminalArea" class="text-left text-md leading-relaxed"></div>
       </div>
       <div
         class="absolute bottom-[-40px] right-[-10px] border-[3px] border-red-600 text-red-600 px-[10px] py-[5px] font-bold rotate-[-15deg] opacity-60 pointer-events-none"
@@ -127,6 +124,7 @@
         handoutScreen.classList.remove("hidden");
         callGenerateFileNumber();
       }
+
       function startVerification() {
         handoutScreen.classList.add("hidden");
         terminalScreen.classList.remove("hidden");
@@ -211,9 +209,9 @@
       async function typeLine(text) {
         for (let i = 0; i < text.length; i++) {
           terminal.innerHTML += text[i];
-          await delay(20);
+          await delay(0);
         }
-        terminal.innerHTML += "\n";
+        terminal.innerHTML += "<br/>";
       }
 
       function delay(ms) {
@@ -224,16 +222,40 @@
         terminal.onclick = null;
 
         terminal.innerHTML = `
-        > ALL ROLES ASSIGNED
+        <div class="text-center flex flex-col gap-y-4 text-white">
+          
+          <div class="tracking-widest">
+            > ALL ROLES ASSIGNED
+          </div>
 
-        > LET THE MAYHEM BEGIN
+          <div class="tracking-widest text-gray-400">
+            > LET THE MAYHEM BEGIN
+          </div>
 
-        > TAP TO END GAME
-        `;
+          <div class="flex justify-center gap-4 pt-4">
+            <button 
+              onclick="restartGame()" 
+              class="px-4 py-2 border-2 border-white text-white font-bold tracking-wider hover:bg-white hover:text-black transition">
+              VIEW ROLES AGAIN
+            </button>
 
-        terminal.onclick = () => {
-          window.location.href = "index.html";
-        };
+            <button 
+              onclick="endGame()" 
+              class="px-4 py-2 border-2 border-red-600 text-red-600 font-bold tracking-wider hover:bg-red-600 hover:text-black transition">
+              END GAME
+            </button>
+          </div>
+
+        </div>`;
+      }
+
+      function restartGame() {
+        currentIndex = 0;
+        showHandout();
+      }
+
+      function endGame() {
+        window.location.href = "index.html";
       }
 
       function getRoleDisplay(role) {
