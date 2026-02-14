@@ -126,8 +126,10 @@
         const mafiaCount = parseInt(localStorage.getItem("mafias") || "1");
         const hasDoctor = localStorage.getItem("doctor") === "YES";
         const hasDetective = localStorage.getItem("detective") === "YES";
+        const hasMayor = localStorage.getItem("mayor") === "YES";
 
-        const specialRoles = (hasDoctor ? 1 : 0) + (hasDetective ? 1 : 0);
+        const specialRoles =
+          (hasDoctor ? 1 : 0) + (hasDetective ? 1 : 0) + (hasMayor ? 1 : 0);
 
         return 2 * mafiaCount + specialRoles;
       }

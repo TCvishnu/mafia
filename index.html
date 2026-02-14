@@ -61,6 +61,19 @@
         </button>
       </div>
 
+      <div
+        class="flex justify-between items-center mb-[15px] border-b border-[#444] pb-[10px]"
+      >
+        <span>Mayor</span>
+        <button
+          id="mayorBtn"
+          onclick="toggleRole(this)"
+          class="w-[50px] py-1 bg-red-500 text-white font-bold transition duration-200"
+        >
+          NO
+        </button>
+      </div>
+
       <button
         onclick="startAssignment()"
         class="mt-[30px] w-full py-5 bg-white text-[#050505] font-['Impact'] text-[1.5rem] cursor-pointer [clip-path:polygon(5%_0,100%_0,100%_70%,95%_100%,0_100%,0_30%)] hover:bg-red-500 hover:text-white"
@@ -79,21 +92,25 @@
       const mafiasInput = document.getElementById("mafiasInput");
       const doctorBtn = document.getElementById("doctorBtn");
       const detectiveBtn = document.getElementById("detectiveBtn");
+      const mayorBtn = document.getElementById("mayorBtn");
 
       window.onload = function () {
         const storedMafias = localStorage.getItem("mafias");
         const storedDoctor = localStorage.getItem("doctor");
         const storedDetective = localStorage.getItem("detective");
+        const storedMayor = localStorage.getItem("mayor");
 
         // Set defaults if nothing stored
         mafiasInput.value = storedMafias ? storedMafias : 1;
         setRoleState(doctorBtn, storedDoctor ? storedDoctor : "YES");
         setRoleState(detectiveBtn, storedDetective ? storedDetective : "YES");
+        setRoleState(mayorBtn, storedMayor ? storedMayor : "NO");
 
         // Ensure values exist in localStorage
         localStorage.setItem("mafias", mafiasInput.value);
         localStorage.setItem("doctor", doctorBtn.innerText);
         localStorage.setItem("detective", detectiveBtn.innerText);
+        localStorage.setItem("mayor", mayorBtn.innerText);
       };
 
       mafiasInput.addEventListener("input", () => {
@@ -111,6 +128,8 @@
           localStorage.setItem("doctor", newValue);
         } else if (button.id === "detectiveBtn") {
           localStorage.setItem("detective", newValue);
+        } else {
+          localStorage.setItem("mayor", newValue);
         }
       }
 

@@ -93,6 +93,7 @@
       const mafiaCount = parseInt(localStorage.getItem("mafias") || "1");
       const hasDoctor = localStorage.getItem("doctor") === "YES";
       const hasDetective = localStorage.getItem("detective") === "YES";
+      const hasMayor = localStorage.getItem("mayor") == "YES";
 
       const handoutScreen = document.getElementById("handoutScreen");
       const terminalScreen = document.getElementById("terminalScreen");
@@ -138,6 +139,7 @@
         for (let i = 0; i < mafiaCount; i++) roles.push("MAFIA");
         if (hasDoctor) roles.push("DOCTOR");
         if (hasDetective) roles.push("DETECTIVE");
+        if (hasMayor) roles.push("MAYOR");
 
         while (roles.length < players.length) {
           roles.push("VILLAGER");
@@ -226,7 +228,7 @@
 
         > LET THE MAYHEM BEGIN
 
-        > TAP TO RETURN
+        > TAP TO END GAME
         `;
 
         terminal.onclick = () => {
@@ -242,6 +244,8 @@
             return `<span class="text-green-500">DOCTOR</span>`;
           case "DETECTIVE":
             return `<span class="text-green-500">DETECTIVE</span>`;
+          case "MAYOR":
+            return `<span class="text-yellow-500">MAYOR</span>`;
           default:
             return `<span class="text-white">VILLAGER</span>`;
         }
