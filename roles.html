@@ -24,22 +24,52 @@
         Identity Protocol
       </div>
       <!-- HANDOUT SCREEN -->
-      <div id="handoutScreen" class="text-center">
-        <div class="text-lg mb-6 tracking-wider">
-          VILLAGE RATION CARD RECORD
-        </div>
-
+      <div id="handoutScreen" class="flex justify-center">
         <div
-          id="handoutName"
-          class="text-2xl font-bold border-2 border-white py-4 mb-6 tracking-wider"
-        ></div>
-
-        <button
-          onclick="startVerification()"
-          class="w-full py-3 bg-white text-black font-bold hover:bg-red-500 hover:text-white transition"
+          class="relative bg-white text-black w-full max-w-md p-6 shadow-2xl border-4 border-black uppercase"
         >
-          ISSUE DOCUMENT
-        </button>
+          <!-- Government Header -->
+          <div class="text-center border-b-2 border-black pb-3 mb-4">
+            <div class="text-xs tracking-widest">Government of Nightfall</div>
+            <div class="text-lg font-black tracking-wider">
+              Village Citizen Registry
+            </div>
+            <div class="text-[10px] tracking-widest mt-1">
+              Official Identification Record
+            </div>
+          </div>
+
+          <!-- File Info -->
+          <div class="text-xs mb-4 flex justify-between">
+            <span>FILE NO: 78421</span>
+            <span>ZONE: EAST WARD</span>
+          </div>
+
+          <!-- Citizen Info Box -->
+          <div class="border-2 border-black p-4 mb-6 bg-gray-100">
+            <div class="text-xs mb-2">CITIZEN NAME</div>
+            <div
+              id="handoutName"
+              class="text-xl font-bold tracking-widest border-b border-black pb-1"
+            ></div>
+
+            <div class="mt-4 text-xs">STATUS: PENDING VERIFICATION</div>
+          </div>
+
+          <div
+            class="absolute top-4 right-4 text-[10px] border border-black px-2 py-1 -rotate-6"
+          >
+            TEMP FILE
+          </div>
+
+          <!-- Issue Button -->
+          <button
+            onclick="startVerification()"
+            class="w-full py-3 bg-black text-white font-bold tracking-widest hover:bg-red-700 transition"
+          >
+            ISSUE DOCUMENT
+          </button>
+        </div>
       </div>
 
       <div id="terminalScreen" class="hidden">
