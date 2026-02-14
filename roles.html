@@ -29,7 +29,7 @@
           class="relative bg-white text-black w-full max-w-md p-6 shadow-2xl border-4 border-black uppercase"
         >
           <!-- Government Header -->
-          <div class="text-center border-b-2 border-black pb-3 mb-4">
+          <div class="text-center border-b-2 border-black pb-3 mb-4 mt-2">
             <div class="text-xs tracking-widest">Government of Nightfall</div>
             <div class="text-lg font-black tracking-wider">
               Village Citizen Registry
@@ -41,8 +41,8 @@
 
           <!-- File Info -->
           <div class="text-xs mb-4 flex justify-between">
-            <span>FILE NO: 78421</span>
-            <span>ZONE: EAST WARD</span>
+            <span id="fileNumber"></span>
+            <span id="zone"></span>
           </div>
 
           <!-- Citizen Info Box -->
@@ -57,7 +57,7 @@
           </div>
 
           <div
-            class="absolute top-4 right-4 text-[10px] border border-black px-2 py-1 -rotate-6"
+            class="absolute top-1 right-1 text-[10px] border border-black px-2 py-1"
           >
             TEMP FILE
           </div>
@@ -122,6 +122,7 @@
 
         terminalScreen.classList.add("hidden");
         handoutScreen.classList.remove("hidden");
+        callGenerateFileNumber();
       }
       function startVerification() {
         handoutScreen.classList.add("hidden");
@@ -308,6 +309,54 @@
         badge.style.opacity = 0.85;
 
         badge.classList.remove("hidden");
+      }
+      function generateFileNumber() {
+        const districtCode = Math.floor(10 + Math.random() * 90);
+        const fileCode = Math.floor(1000 + Math.random() * 9000);
+        const randomPart = Math.floor(10000 + Math.random() * 90000);
+        return `FILE NO: NF/${districtCode}-${fileCode}/${randomPart}`;
+      }
+
+      function callGenerateFileNumber() {
+        document.getElementById("fileNumber").textContent =
+          generateFileNumber();
+
+        document.getElementById("zone").textContent = generateZone();
+      }
+
+      function generateZone() {
+        const zones = [
+          "EAST HAMLET",
+          "WEST HAMLET",
+          "NORTH FIELDS",
+          "SOUTH FARMLANDS",
+          "RIVER BANK",
+          "MANGO GROVE",
+          "TEMPLE ROAD",
+          "PANCHAYAT LANE",
+          "OLD WELL AREA",
+          "BANYAN TREE SQUARE",
+          "HARVEST FIELDS",
+          "CATTLE SHED ROW",
+          "PALM GROVE",
+          "LAKE SIDE",
+          "CHURCH HILL",
+          "MARKET CHOWK",
+          "SCHOOL ROAD",
+          "MUD HOUSE CLUSTER",
+          "FOREST BORDER",
+          "CANAL SIDE",
+          "THOTTAM AREA",
+          "KULAM SIDE",
+          "PADAM FIELDS",
+          "CHAVADI LANE",
+          "AGRAHARAM STREET",
+          "KOIL STREET",
+        ];
+
+        const randomZone = zones[Math.floor(Math.random() * zones.length)];
+
+        return `ZONE: ${randomZone}`;
       }
     </script>
   </body>
