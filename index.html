@@ -28,9 +28,9 @@
       >
         <span>Mafias</span>
         <input
+          id="mafiasInput"
           type="number"
-          value="2"
-          min="2"
+          min="1"
           class="bg-transparent border-none text-white font-mono text-[1.2rem] w-[50px] text-center outline-none focus:text-red-600"
         />
       </div>
@@ -40,6 +40,7 @@
       >
         <span>Doctor</span>
         <button
+          id="doctorBtn"
           onclick="toggleRole(this)"
           class="w-[50px] py-1 bg-white text-[#050505] font-bold transition duration-200"
         >
@@ -52,6 +53,7 @@
       >
         <span>Detective</span>
         <button
+          id="detectiveBtn"
           onclick="toggleRole(this)"
           class="w-[50px] py-1 bg-white text-[#050505] font-bold transition duration-200"
         >
@@ -74,23 +76,29 @@
     </div>
 
     <script>
-      const mafiasInput = document.querySelectorAll("input")[0];
-      const roleButtons = document.querySelectorAll("button[onclick]");
+      const mafiasInput = document.getElementById("mafiasInput");
+      const doctorBtn = document.getElementById("doctorBtn");
+      const detectiveBtn = document.getElementById("detectiveBtn");
 
       window.onload = function () {
-        const mafias = localStorage.getItem("mafias");
-        const doctor = localStorage.getItem("doctor");
-        const detective = localStorage.getItem("detective");
-        const players = JSON.parse(localStorage.getItem("playersList") || "[]");
+        const storedMafias = localStorage.getItem("mafias");
+        const storedDoctor = localStorage.getItem("doctor");
+        const storedDetective = localStorage.getItem("detective");
 
-        if (mafias) mafiasInput.value = mafias;
+        // Set defaults if nothing stored
+        mafiasInput.value = storedMafias ? storedMafias : 1;
+        setRoleState(doctorBtn, storedDoctor ? storedDoctor : "YES");
+        setRoleState(detectiveBtn, storedDetective ? storedDetective : "YES");
 
-        if (doctor) setRoleState(roleButtons[0], doctor);
-        if (detective) setRoleState(roleButtons[1], detective);
+        // Ensure values exist in localStorage
+        localStorage.setItem("mafias", mafiasInput.value);
+        localStorage.setItem("doctor", doctorBtn.innerText);
+        localStorage.setItem("detective", detectiveBtn.innerText);
       };
 
       mafiasInput.addEventListener("input", () => {
-        localStorage.setItem("mafias", mafiasInput.value);
+        const value = mafiasInput.value || 1;
+        localStorage.setItem("mafias", value);
       });
 
       function toggleRole(button) {
@@ -99,9 +107,9 @@
 
         setRoleState(button, newValue);
 
-        if (button.parentElement.querySelector("span").innerText === "Doctor") {
+        if (button.id === "doctorBtn") {
           localStorage.setItem("doctor", newValue);
-        } else {
+        } else if (button.id === "detectiveBtn") {
           localStorage.setItem("detective", newValue);
         }
       }
