@@ -54,7 +54,7 @@
             <div class="text-xs mb-2">CITIZEN NAME</div>
             <div
               id="handoutName"
-              class="text-xl font-bold tracking-widest border-b border-black pb-1"
+              class="text-3xl font-bold tracking-widest border-b border-black pb-1"
             ></div>
 
             <div class="mt-4 text-xs">STATUS: PENDING VERIFICATION</div>
@@ -174,30 +174,30 @@
           : name.toUpperCase();
 
         await typeLine(`> VILLAGE CITIZEN RECORD`);
-        await delay(800);
+        await delay(100);
 
         await typeLine(`> ANALYZING CITIZEN NAME...`);
-        await delay(700);
+        await delay(100);
 
         await typeLine(`> NAME: ${displayName}`);
-        await delay(900);
+        await delay(100);
 
         await typeLine(`> VERIFYING CITIZEN STATUS:`);
-        await delay(400);
+        await delay(100);
         if (roles[currentIndex] === "MAFIA") {
-          await delay(600);
+          await delay(100);
           await typeLine(`> ERROR: RECORD MISMATCH`);
-          await delay(700);
+          await delay(100);
 
           await typeLine(`> CROSS-CHECKING...`);
-          await delay(900);
+          await delay(100);
         }
         const roleHTML = getRoleDisplay(roles[currentIndex]);
         terminal.innerHTML += `<div class="py-3 text-4xl tracking-wider">   ${roleHTML}</div>`;
 
         showRoleBadge(roles[currentIndex]);
 
-        await delay(500);
+        await delay(100);
         await typeLine(`> NEXT APPLICANT PLEASE`);
 
         terminal.onclick = () => {
